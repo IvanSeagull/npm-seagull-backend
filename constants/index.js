@@ -1,0 +1,27 @@
+const indexText = `//author: Ivan Seagull
+const express = require('express');
+const app = express();
+
+app.use(express.json());
+
+const mainRouter = require('./Routes/mainRouter');
+
+app.use('/api', mainRouter);
+
+app.get('/', (req, res) => {
+  res.status(200).json({ msg: 'Home' });
+});
+const startApp = async () => {
+  db.authenticate()
+    .then(() => console.log('Database connected...'))
+    .catch((err) => console.log('Error ', err));
+
+  app.listen(5000, () => {
+    console.log('Listening server on port 5000');
+  });
+};
+
+startApp();
+`;
+
+module.exports = { indexText };

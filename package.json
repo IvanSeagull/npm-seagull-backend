@@ -1,12 +1,23 @@
 {
   "name": "seagull-backend",
-  "version": "1.0.0",
-  "description": "",
+  "version": "1.0.1",
+  "description": "A npm package for quickly creating a project structure on express.js",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "bin": {
+    "seagull-backend": "index.js"
+  },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/IvanSeagull/npm-seagull-backend.git"
+  },
+  "bugs": {
+    "url": "https://github.com/IvanSeagull/npm-seagull-backend/issues"
+  },
+  "homepage": "https://github.com/IvanSeagull/npm-seagull-backend#readme"
 }

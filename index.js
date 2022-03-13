@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 let fs = require('fs');
 var dir = `./${process.argv[2]}`;
 const { exec } = require('child_process');

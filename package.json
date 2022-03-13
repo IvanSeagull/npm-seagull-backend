@@ -1,6 +1,6 @@
 {
   "name": "seagull-backend",
-  "version": "1.0.1",
+  "version": "1.0.02",
   "description": "A npm package for quickly creating a project structure on express.js",
   "main": "index.js",
   "scripts": {

@@ -24,4 +24,24 @@ const startApp = async () => {
 startApp();
 `;
 
-module.exports = { indexText };
+const mainRouterText = `//author: Ivan Seagull
+const { Router } = require('express');
+
+const mainRouter = new Router();
+
+// example of additional Router
+//const userRouter = require('./userRouter');
+
+
+mainRouter.get('/', (req, res) => {
+  res.status(200).json({ msg: 'api router' });
+});
+
+// 
+//mainRouter.use('/users', userRouter);
+
+module.exports = mainRouter;
+
+`;
+
+module.exports = { indexText, mainRouterText };

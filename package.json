@@ -1,9 +1,11 @@
 {
   "name": "seagull-backend",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "A npm package for quickly creating a project structure on express.js",
   "main": "index.js",
+  "type": "module",
   "scripts": {
+    "start": "nodemon --experimental-modules --es-module-specifier-resolution=node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "bin": {
@@ -19,5 +21,10 @@
   "bugs": {
     "url": "https://github.com/IvanSeagull/npm-seagull-backend/issues"
   },
-  "homepage": "https://github.com/IvanSeagull/npm-seagull-backend#readme"
+  "homepage": "https://github.com/IvanSeagull/npm-seagull-backend#readme",
+  "dependencies": {
+    "chalk": "^5.0.1",
+    "inquirer": "^8.2.1",
+    "nanospinner": "^1.0.0"
+  }
 }

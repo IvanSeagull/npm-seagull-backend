@@ -1,4 +1,4 @@
-const indexText = `//author: Ivan Seagull
+export const indexText = `//author: Ivan Seagull
 const express = require('express');
 const app = express();
 
@@ -24,7 +24,7 @@ const startApp = async () => {
 startApp();
 `;
 
-const mainRouterText = `//author: Ivan Seagull
+export const mainRouterText = `//author: Ivan Seagull
 const { Router } = require('express');
 
 const mainRouter = new Router();
@@ -43,5 +43,3 @@ mainRouter.get('/', (req, res) => {
 module.exports = mainRouter;
 
 `;
-
-module.exports = { indexText, mainRouterText };

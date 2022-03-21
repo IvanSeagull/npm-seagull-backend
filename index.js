@@ -135,8 +135,6 @@ const main = async (type) => {
       },
     );
   } else if (type[0] == 3) {
-    // console.log(4);
-
     console.log('Custom');
   }
 };

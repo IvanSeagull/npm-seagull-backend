@@ -5,7 +5,7 @@ import chalk from 'chalk';
 import inquirer from 'inquirer';
 import { createSpinner } from 'nanospinner';
 
-import { indexText, mainRouterText } from './constants/index.js';
+import { indexText, mainRouterText, indexWithSwaggerText, swaggerText } from './constants/index.js';
 console.log(chalk.blue('Hello world!'));
 
 let dir = `./${process.argv[2]}`;
@@ -17,16 +17,15 @@ async function askType() {
     message: 'Select type of the project',
     choices: [
       '1) Bare project - basically only server.js',
-      '2) Sequelize sample - with sequelize and postgresql project',
-      '3) Full setup - sequelize, admin.js, swagger',
-      '4) Custom setup',
+      '2) Full setup - sequelize, pg, swagger',
+      '3) Custom setup',
     ],
   });
 
   return type.selectType;
 }
 
-const setUpFolders = async (type = 0) => {
+const setUpFolders = async (type = 1) => {
   // console.clear();
 
   console.log(chalk.blue('Setting up folders'));
@@ -34,19 +33,29 @@ const setUpFolders = async (type = 0) => {
   fs.mkdirSync(`${dir}/Routes`);
   fs.mkdirSync(`${dir}/Controllers`);
   // create index file
-  fs.appendFile(`${dir}/index.js`, indexText, function (err) {
-    if (err) throw err;
-  });
 
   fs.appendFile(`${dir}/Routes/mainRouter.js`, mainRouterText, function (err) {
     if (err) throw err;
   });
 
+  if (type === 1) {
+    fs.appendFile(`${dir}/index.js`, indexText, function (err) {
+      if (err) throw err;
+    });
+  } else if (type === 2) {
+    fs.appendFile(`${dir}/index.js`, indexWithSwaggerText, function (err) {
+      if (err) throw err;
+    });
+    fs.appendFile(`${dir}/swagger.json`, swaggerText, function (err) {
+      if (err) throw err;
+    });
+  }
+
   finishedMessage();
 };
 
 const finishedMessage = () => {
-  console.clear();
+  // console.clear();
   console.log(
     chalk.blue(`Installation finished
   
@@ -56,56 +65,12 @@ const finishedMessage = () => {
 };
 
 const main = async (type) => {
-  console.log(type[0]);
+  // console.log(type[0]);
   fs.mkdirSync(dir);
-  // init npm, install modules, git init
   const spinner = createSpinner('Initializing repository').start();
   if (type[0] == 1) {
-    // console.log(1);
-
-    // console.log('Bare');
-    exec(`cd ${process.argv[2]} && npm init -y `, (error, stdout, stderr) => {
-      if (error) {
-        spinner.error({ text: `Error ${error}` });
-        fs.unlinkSync(`${dir}/package.json`);
-        fs.rmdirSync(dir);
-        process.exit(1);
-      }
-      if (stderr) {
-        spinner.error({ text: `Error` });
-        fs.unlinkSync(`${dir}/package.json`);
-        fs.rmdirSync(dir);
-        process.exit(1);
-      }
-      spinner.success({ text: 'Finished' });
-      setUpFolders();
-    });
-  } else if (type[0] == 2) {
-    // console.log(2);
     exec(
-      `cd ${process.argv[2]} && npm init -y &&  && npm i express nodemon bcryptjs express-validator jsonwebtoken sequelize pg pg-hstore && npm install --save-dev sequelize-cli && npx sequelize-cli init `,
-      (error, stdout, stderr) => {
-        if (error) {
-          spinner.error({ text: `Error` });
-          fs.unlinkSync(`${dir}/package.json`);
-          fs.rmdirSync(dir);
-          process.exit(1);
-        }
-        if (stderr) {
-          spinner.error({ text: `Error` });
-          fs.unlinkSync(`${dir}/package.json`);
-          fs.rmdirSync(dir);
-          process.exit(1);
-        }
-        spinner.success({ text: 'Finished' });
-        setUpFolders();
-      },
-    );
-  } else if (type[0] == 3) {
-    // console.log(3);
-
-    exec(
-      `cd ${process.argv[2]} && npm init -y  && npm i express nodemon bcryptjs express-validator jsonwebtoken sequelize pg pg-hstore swagger-ui-express adminjs @adminjs/sequelize @adminjs/express && npm install --save-dev sequelize-cli`,
+      `cd ${process.argv[2]} && npm init -y && npm i express nodemon `,
       (error, stdout, stderr) => {
         if (error) {
           spinner.error({ text: `Error ${error}` });
@@ -114,7 +79,7 @@ const main = async (type) => {
           process.exit(1);
         }
         if (stderr) {
-          spinner.error({ text: `StdError ${error}` });
+          spinner.error({ text: `Error` });
           fs.unlinkSync(`${dir}/package.json`);
           fs.rmdirSync(dir);
           process.exit(1);
@@ -123,37 +88,45 @@ const main = async (type) => {
         setUpFolders();
       },
     );
-  } else if (type[0] == 4) {
+  } else if (type[0] == 2) {
+    // console.log(3);
+
+    exec(
+      `cd ${process.argv[2]} && npm init -y  && npm i express nodemon bcryptjs express-validator jsonwebtoken swagger-ui-express && npm install --save sequelize pg pg-hstore && npm install --save-dev sequelize-cli && npx sequelize-cli init `,
+      // `cd ${process.argv[2]} && npm init -y`,
+
+      (error, stdout, stderr) => {
+        if (error) {
+          spinner.error({ text: `Error ${error}` });
+          // fs.unlinkSync(`${dir}/package.json`);
+          // fs.unlinkSync(`${dir}/package-lock.json`);
+          // fs.rmdirSync(`${dir}/node_modules`);
+          // fs.rmdirSync(dir);
+          process.exit(1);
+        }
+        if (stderr) {
+          spinner.error({ text: `StdError ${error}` });
+          // fs.unlinkSync(`${dir}/package.json`);
+          // fs.unlinkSync(`${dir}/package-lock.json`);
+          // fs.rmdirSync(`${dir}/node_modules`);
+          // fs.rmdirSync(dir);
+          process.exit(1);
+        }
+        spinner.success({ text: 'Finished' });
+        setUpFolders(2);
+      },
+    );
+  } else if (type[0] == 3) {
     // console.log(4);
 
     console.log('Custom');
   }
-
-  // exec(
-  //   `clear && cd ${process.argv[2]} && npm init -y  && npm i express nodemon bcryptjs express-validator jsonwebtoken`,
-  //   (error, stdout, stderr) => {
-  //     if (error) {
-  //       spinner.error({ text: `Error` });
-  //       fs.unlinkSync(`${dir}/package.json`);
-  //       fs.rmdirSync(dir);
-  //       process.exit(1);
-  //     }
-  //     if (stderr) {
-  //       spinner.error({ text: `Error` });
-  //       fs.unlinkSync(`${dir}/package.json`);
-  //       fs.rmdirSync(dir);
-  //       process.exit(1);
-  //     }
-  //     // console.log(`stdout: ${stdout}`);
-  //     spinner.success({ text: 'Finished' });
-  //     setUpFolders();
-  //   },
-  // );
 };
 
 if (!fs.existsSync(dir) && process.argv[2] !== undefined) {
+  console.clear();
   let type = await askType();
-  console.log(chalk.blue(type));
+  // console.log(chalk.blue(type));
   main(type);
 } else {
   console.log('Folder with that name already exists');

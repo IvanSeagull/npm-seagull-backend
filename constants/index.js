@@ -1,27 +1,26 @@
 export const indexText = `//author: Ivan Seagull
 const express = require('express');
-const app = express();
+const server = express();
 
-app.use(express.json());
+server.use(express.json());
 
 const mainRouter = require('./Routes/mainRouter');
 
-app.use('/api', mainRouter);
+server.use('/api', mainRouter);
 
-app.get('/', (req, res) => {
+server.get('/', (req, res) => {
   res.status(200).json({ msg: 'Home' });
 });
-const startApp = async () => {
-  db.authenticate()
-    .then(() => console.log('Database connected...'))
-    .catch((err) => console.log('Error ', err));
 
-  app.listen(5000, () => {
-    console.log('Listening server on port 5000');
+const PORT = process.env.PORT || 5000
+
+const startServer = async () => {
+  server.listen(PORT, () => {
+    console.log('Listening server on port ', PORT);
   });
 };
 
-startApp();
+startServer();
 `;
 
 export const mainRouterText = `//author: Ivan Seagull
@@ -43,3 +42,96 @@ mainRouter.get('/', (req, res) => {
 module.exports = mainRouter;
 
 `;
+
+export const indexWithSwaggerText = `//author: Ivan Seagull
+const express = require('express');
+const server = express();
+
+server.use(express.json());
+
+// SWAGGER DOCS
+const swaggerUi = require('swagger-ui-express');
+const swaggerDoc = require('./swagger.json');
+server.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDoc));
+// SWAGGER DOCS
+
+const mainRouter = require('./Routes/mainRouter');
+
+server.use('/api', mainRouter);
+
+server.get('/', (req, res) => {
+  res.status(200).json({ msg: 'Home' });
+});
+
+const PORT = process.env.PORT || 5000
+
+const startServer = async () => {
+  server.listen(PORT, () => {
+    console.log('Listening server on port ', PORT);
+  });
+};
+
+startServer();`;
+
+export const fullIndexText = `//author: Ivan Seagull
+const express = require('express');
+const server = express();
+const db = require('./db');
+
+server.use(express.json());
+
+// SWAGGER DOCS
+const swaggerUi = require('swagger-ui-express');
+const swaggerDoc = require('./swagger.json');
+server.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDoc));
+// SWAGGER DOCS
+
+const mainRouter = require('./Routes/mainRouter');
+
+server.use('/api', mainRouter);
+
+server.get('/', (req, res) => {
+  res.status(200).json({ msg: 'Home' });
+});
+
+const PORT = process.env.PORT || 5000
+
+const startServer = async () => {
+  db.authenticate()
+    .then(() => console.log('Database connected...'))
+    .catch((err) => console.log('Error ', err));
+
+  server.listen(PORT, () => {
+    console.log('Listening server on port ', PORT);
+  });
+};
+
+startServer();`;
+
+export const swaggerText = `{
+  "openapi": "3.0.0",
+  "info": {
+    "version": "1.0.0", 
+    "title": "Project title",
+    "description": "project desc",
+    "license": {
+      "name": "MIT",
+      "url": "https://opensource.org/licenses/MIT"
+    }
+  },
+  "host": "localhost:5000",
+  "basePath": "/",
+  "servers": [
+      {
+        "url": "http://localhost:5000"
+      }
+    ],
+  "apis": ["./Routes/*.js", "./index.js"],
+
+  "tags": [
+    {
+      "name": "Users",
+      "description": "user-controller"
+    }
+  ]
+}`;

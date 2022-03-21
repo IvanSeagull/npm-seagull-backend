@@ -5,7 +5,16 @@ import chalk from 'chalk';
 import inquirer from 'inquirer';
 import { createSpinner } from 'nanospinner';
 
-import { indexText, mainRouterText, indexWithSwaggerText, swaggerText } from './constants/index.js';
+import {
+  indexText,
+  indexWithSwaggerText,
+  mainRouterText,
+  swaggerText,
+  fullIndexText,
+  configText,
+  dbText,
+  gitText,
+} from './constants/index.js';
 console.log(chalk.blue('Hello world!'));
 
 let dir = `./${process.argv[2]}`;
@@ -43,7 +52,16 @@ const setUpFolders = async (type = 1) => {
       if (err) throw err;
     });
   } else if (type === 2) {
-    fs.appendFile(`${dir}/index.js`, indexWithSwaggerText, function (err) {
+    fs.appendFile(`${dir}/index.js`, fullIndexText, function (err) {
+      if (err) throw err;
+    });
+    fs.appendFile(`${dir}/config.js`, configText, function (err) {
+      if (err) throw err;
+    });
+    fs.appendFile(`${dir}/db.js`, dbText, function (err) {
+      if (err) throw err;
+    });
+    fs.appendFile(`${dir}/.gitignore`, gitText, function (err) {
       if (err) throw err;
     });
     fs.appendFile(`${dir}/swagger.json`, swaggerText, function (err) {

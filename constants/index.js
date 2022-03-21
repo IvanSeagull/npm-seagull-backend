@@ -135,3 +135,54 @@ export const swaggerText = `{
     }
   ]
 }`;
+
+export const dbText = `const Sequelize = require('sequelize');
+const configData = require('./config');
+
+const db = new Sequelize(configData.DB_NAME, configData.DB_USER, configData.DB_PASSWORD, {
+  host: configData.DB_HOST,
+  dialect: 'postgres',
+  //   operatorsAliases: false,
+
+  pool: {
+    max: 5,
+    min: 0,
+    acquire: 30000,
+    idle: 10000,
+  },
+});
+
+module.exports = db;
+`;
+
+export const configText = `
+const configData = {
+  DB_NAME: 'name',
+  DB_USER: 'user',
+  DB_PASSWORD: 'password',
+  DB_HOST: 'localhost',
+  SECRET_JWT: 'very_secret_string_to_create_password',
+
+  // for admin panel
+  //COOKIE_NAME: 'cookie_name',
+  //COOKIE_PASSWORD: 'cookie_password',
+  // ADMINS: [
+  //   {
+  //     email: 'test@gmail.com',
+  //     password: 'password',
+  //   },
+  //   {
+  //     email: 'test@gmail.com',
+  //     password: 'password',
+  //   },
+  // ],
+};
+
+module.exports = configData;
+`;
+
+export const gitText = `# node modules
+/node_modules
+# config for db
+/config
+config.js`;

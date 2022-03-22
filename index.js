@@ -74,6 +74,18 @@ const setUpFolders = async (type = 1) => {
       if (err) throw err;
     });
   } else if (type === 2) {
+    try {
+      let packaged = jsonfile.readFileSync(`${dir}/package.json`);
+      packaged.scripts.createMigration =
+        'npx sequelize-cli model:generate --name [name] --attributes email:string';
+      packaged.scripts.migrate = 'npx sequelize-cli db:migrate';
+      packaged.scripts.down = 'npx sequelize-cli db:migrate:undo';
+
+      packaged.main = 'server.js';
+      jsonfile.writeFileSync(`${dir}/package.json`, packaged, { spaces: 2 });
+    } catch (error) {
+      console.error(error);
+    }
     fs.appendFile(`${dir}/server.js`, fullIndexText, function (err) {
       if (err) throw err;
     });

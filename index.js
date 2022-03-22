@@ -5,6 +5,8 @@ import chalk from 'chalk';
 import inquirer from 'inquirer';
 import { createSpinner } from 'nanospinner';
 
+import jsonfile from 'jsonfile';
+
 import {
   indexText,
   indexWithSwaggerText,
@@ -34,6 +36,15 @@ async function askType() {
   return type.selectType;
 }
 
+const addScripts = () => {
+  try {
+    let packaged = jsonfile.readFileSync('package.json');
+    packaged.scripts.dev = 'nodemon index';
+    console.log(packaged.scripts);
+    jsonfile.writeFileSync('package.json', packaged, { spaces: 2 });
+  } catch (error) {}
+};
+
 const setUpFolders = async (type = 1) => {
   // console.clear();
 
@@ -43,16 +54,27 @@ const setUpFolders = async (type = 1) => {
   fs.mkdirSync(`${dir}/Controllers`);
   // create index file
 
+  // changing package
+  try {
+    let packaged = jsonfile.readFileSync(`${dir}/package.json`);
+    packaged.scripts.dev = 'nodemon server';
+    packaged.scripts.start = 'node server';
+    packaged.main = 'server.js';
+    jsonfile.writeFileSync(`${dir}/package.json`, packaged, { spaces: 2 });
+  } catch (error) {
+    console.error(error);
+  }
+
   fs.appendFile(`${dir}/Routes/mainRouter.js`, mainRouterText, function (err) {
     if (err) throw err;
   });
 
   if (type === 1) {
-    fs.appendFile(`${dir}/index.js`, indexText, function (err) {
+    fs.appendFile(`${dir}/server.js`, indexText, function (err) {
       if (err) throw err;
     });
   } else if (type === 2) {
-    fs.appendFile(`${dir}/index.js`, fullIndexText, function (err) {
+    fs.appendFile(`${dir}/server.js`, fullIndexText, function (err) {
       if (err) throw err;
     });
     fs.appendFile(`${dir}/config.js`, configText, function (err) {
@@ -141,8 +163,8 @@ const main = async (type) => {
 
 if (!fs.existsSync(dir) && process.argv[2] !== undefined) {
   console.clear();
+
   let type = await askType();
-  // console.log(chalk.blue(type));
   main(type);
 } else {
   console.log('Folder with that name already exists');

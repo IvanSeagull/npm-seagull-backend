@@ -25,6 +25,7 @@
   "dependencies": {
     "chalk": "^5.0.1",
     "inquirer": "^8.2.1",
+    "jsonfile": "^6.1.0",
     "nanospinner": "^1.0.0"
   }
 }
